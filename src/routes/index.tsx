@@ -23,7 +23,7 @@ export const Route = createFileRoute("/")({
 });
 
 const steps = [
-  "Download the file below and unzip it (double-click it).",
+  "Press the orange Download button, then unzip the file (double-click it).",
   "Open a new tab and go to chrome://extensions",
   "Turn on “Developer mode” using the switch in the top-right corner.",
   "Click “Load unpacked” and choose the folder you unzipped.",
