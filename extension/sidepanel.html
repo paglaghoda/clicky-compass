@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Guide Me</title>
+    <link rel="stylesheet" href="sidepanel.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="brand">
+        <img src="icon.png" alt="" width="36" height="36" />
+        <div>
+          <h1>Guide Me</h1>
+          <p>I'll show you what to click.</p>
+        </div>
+      </div>
+      <button id="settings-btn" class="icon-btn" title="Settings" aria-label="Settings">&#9881;</button>
+    </header>
+
+    <section id="settings" class="settings" hidden>
+      <label for="api-base">Helper address</label>
+      <input id="api-base" type="url" spellcheck="false" />
+      <button id="save-settings" class="secondary-btn">Save</button>
+    </section>
+
+    <section id="progress" class="progress" hidden>
+      <div class="progress-text"><span id="step-label">Step 1 of 1</span></div>
+      <div class="progress-bar"><div id="progress-fill"></div></div>
+    </section>
+
+    <main id="chat" class="chat" aria-live="polite">
+      <div class="bubble assistant welcome">
+        <p>Hello! Tell me what you would like to do on this website.</p>
+        <p class="examples">For example:</p>
+        <button class="example">Cancel my Amazon Prime subscription</button>
+        <button class="example">Change my password</button>
+        <button class="example">Book a doctor's appointment</button>
+      </div>
+    </main>
+
+    <div id="controls" class="controls" hidden>
+      <button id="repeat-btn" class="secondary-btn">&#128266; Say it again</button>
+      <button id="find-btn" class="secondary-btn">&#128269; I can't find it</button>
+      <button id="stop-btn" class="secondary-btn danger">&#10006; Stop</button>
+    </div>
+
+    <footer class="composer">
+      <textarea
+        id="input"
+        rows="2"
+        placeholder="Type what you want to do..."
+        autocomplete="off"
+      ></textarea>
+      <div class="composer-row">
+        <button id="mic-btn" class="mic-btn">&#127908; Hold to talk</button>
+        <button id="send-btn" class="send-btn">Send</button>
+      </div>
+      <p id="status" class="status"></p>
+    </footer>
+
+    <script src="sidepanel.js"></script>
+  </body>
+</html>
