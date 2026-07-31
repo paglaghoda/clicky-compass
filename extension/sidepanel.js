@@ -24,6 +24,10 @@ let lastSpoken = "";
 let lastStep = "";
 let busy = false;
 let audioEl = null;
+let research = null;
+let noProgress = 0;
+let lastSeenUrl = "";
+
 
 function setView(view) {
   body.dataset.view = view;
