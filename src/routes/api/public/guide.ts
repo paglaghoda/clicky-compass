@@ -176,6 +176,8 @@ export const Route = createFileRoute("/api/public/guide")({
             totalSteps: Number(parsed.totalSteps) || 1,
             warning: parsed.warning ? String(parsed.warning) : null,
             done: Boolean(parsed.done),
+            stuck: Boolean(parsed.stuck) || research.feasible === "no" || research.feasible === "elsewhere",
+
           },
           { headers: corsHeaders },
         );
