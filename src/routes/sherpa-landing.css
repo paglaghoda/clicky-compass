@@ -7,7 +7,6 @@
   --orange-deep: #B84E10;
   --orange-glow: #FBE0C7;
   --sage: #7C9070;
-  --sage-pole: #E7EEDF;
   --sage-pale: #E7EEDF;
   --forest: #2F4A32;
   --line: #DCD3BE;
@@ -584,7 +583,7 @@ html:has(.sherpa-landing) {
     & .hero-grid {
       grid-template-columns:1fr; gap:44px;
     }
-    & .feature, .feature.reverse {
+    & .feature, & .feature.reverse {
       grid-template-columns:1fr;
     }
     & .feature.reverse .feature-art {
@@ -598,7 +597,9 @@ html:has(.sherpa-landing) {
     }
   }
   & @media (max-width:640px) {
-    font-size:18px;
+    & {
+      font-size:18px;
+    }
     & .wrap, .wrap-narrow {
       padding:0 20px;
     }
