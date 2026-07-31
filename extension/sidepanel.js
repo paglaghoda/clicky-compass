@@ -13,6 +13,7 @@ const stepLabel = document.getElementById("step-label");
 const progressFill = document.getElementById("progress-fill");
 const settingsPanel = document.getElementById("settings");
 const apiBaseInput = document.getElementById("api-base");
+const thinkingEl = document.getElementById("thinking");
 
 let apiBase = DEFAULT_API_BASE;
 let goal = "";
@@ -20,6 +21,17 @@ let history = [];
 let lastSpoken = "";
 let busy = false;
 let audioEl = null;
+
+function showThinking() {
+  if (thinkingEl) {
+    thinkingEl.hidden = false;
+    chatEl.scrollTop = chatEl.scrollHeight;
+  }
+}
+
+function hideThinking() {
+  if (thinkingEl) thinkingEl.hidden = true;
+}
 
 /* ---------- settings ---------- */
 
@@ -126,6 +138,8 @@ async function nextStep(userText) {
   if (busy) return;
   busy = true;
   sendBtn.disabled = true;
+  micBtn.disabled = true;
+  showThinking();
   setStatus("Looking at this page...");
 
   try {
@@ -133,6 +147,7 @@ async function nextStep(userText) {
     try {
       page = await sendToPage({ type: "scan" });
     } catch {
+      hideThinking();
       setStatus("");
       addBubble(
         "I can't read this page. Chrome doesn't let me help on this kind of page — please open a normal website first.",
@@ -151,11 +166,13 @@ async function nextStep(userText) {
 
     const data = await res.json().catch(() => ({}));
     if (!res.ok) {
+      hideThinking();
       setStatus("");
       addBubble(data.error || "Something went wrong. Please try again.", "assistant");
       return;
     }
 
+    hideThinking();
     setStatus("");
     history.push({ role: "assistant", content: data.instruction });
     addBubble(data.instruction, "assistant", { step: true, warning: data.warning });
@@ -184,6 +201,7 @@ async function nextStep(userText) {
   } finally {
     busy = false;
     sendBtn.disabled = false;
+    micBtn.disabled = false;
     inputEl.focus();
   }
 }
@@ -230,6 +248,7 @@ document.getElementById("stop-btn").addEventListener("click", async () => {
   history = [];
   controlsEl.hidden = true;
   progressEl.hidden = true;
+  hideThinking();
   if (audioEl) audioEl.pause();
   await sendToPage({ type: "clear" }).catch(() => {});
   addBubble("Alright, we've stopped. Tell me any time if you'd like help with something else.", "assistant");
@@ -322,6 +341,7 @@ async function stopRecording() {
     return;
   }
 
+  showThinking();
   setStatus("Understanding what you said...");
   try {
     const form = new FormData();
@@ -329,13 +349,16 @@ async function stopRecording() {
     const res = await fetch(`${apiBase}/api/public/transcribe`, { method: "POST", body: form });
     const data = await res.json().catch(() => ({}));
     if (!res.ok || !data.text) {
+      hideThinking();
       setStatus(data.error || "I couldn't understand that. Please try again.");
       return;
     }
+    hideThinking();
     setStatus("");
     inputEl.value = data.text;
     submit();
   } catch {
+    hideThinking();
     setStatus("I couldn't hear that. Please try again.");
   }
 }
