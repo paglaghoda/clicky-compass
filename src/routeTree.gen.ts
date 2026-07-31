@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiPublicGuideRouteImport } from './routes/api/public/guide'
 import { Route as ApiPublicHandoffRouteImport } from './routes/api/public/handoff'
 import { Route as ApiPublicInspectRouteImport } from './routes/api/public/inspect'
+import { Route as ApiPublicResearchRouteImport } from './routes/api/public/research'
 import { Route as ApiPublicSpeakRouteImport } from './routes/api/public/speak'
 import { Route as ApiPublicTranscribeRouteImport } from './routes/api/public/transcribe'
 
@@ -36,6 +37,11 @@ const ApiPublicInspectRoute = ApiPublicInspectRouteImport.update({
   path: '/api/public/inspect',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicResearchRoute = ApiPublicResearchRouteImport.update({
+  id: '/api/public/research',
+  path: '/api/public/research',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicSpeakRoute = ApiPublicSpeakRouteImport.update({
   id: '/api/public/speak',
   path: '/api/public/speak',
@@ -52,6 +58,7 @@ export interface FileRoutesByFullPath {
   '/api/public/guide': typeof ApiPublicGuideRoute
   '/api/public/handoff': typeof ApiPublicHandoffRoute
   '/api/public/inspect': typeof ApiPublicInspectRoute
+  '/api/public/research': typeof ApiPublicResearchRoute
   '/api/public/speak': typeof ApiPublicSpeakRoute
   '/api/public/transcribe': typeof ApiPublicTranscribeRoute
 }
@@ -60,6 +67,7 @@ export interface FileRoutesByTo {
   '/api/public/guide': typeof ApiPublicGuideRoute
   '/api/public/handoff': typeof ApiPublicHandoffRoute
   '/api/public/inspect': typeof ApiPublicInspectRoute
+  '/api/public/research': typeof ApiPublicResearchRoute
   '/api/public/speak': typeof ApiPublicSpeakRoute
   '/api/public/transcribe': typeof ApiPublicTranscribeRoute
 }
@@ -69,6 +77,7 @@ export interface FileRoutesById {
   '/api/public/guide': typeof ApiPublicGuideRoute
   '/api/public/handoff': typeof ApiPublicHandoffRoute
   '/api/public/inspect': typeof ApiPublicInspectRoute
+  '/api/public/research': typeof ApiPublicResearchRoute
   '/api/public/speak': typeof ApiPublicSpeakRoute
   '/api/public/transcribe': typeof ApiPublicTranscribeRoute
 }
@@ -79,6 +88,7 @@ export interface FileRouteTypes {
     | '/api/public/guide'
     | '/api/public/handoff'
     | '/api/public/inspect'
+    | '/api/public/research'
     | '/api/public/speak'
     | '/api/public/transcribe'
   fileRoutesByTo: FileRoutesByTo
@@ -87,6 +97,7 @@ export interface FileRouteTypes {
     | '/api/public/guide'
     | '/api/public/handoff'
     | '/api/public/inspect'
+    | '/api/public/research'
     | '/api/public/speak'
     | '/api/public/transcribe'
   id:
@@ -95,6 +106,7 @@ export interface FileRouteTypes {
     | '/api/public/guide'
     | '/api/public/handoff'
     | '/api/public/inspect'
+    | '/api/public/research'
     | '/api/public/speak'
     | '/api/public/transcribe'
   fileRoutesById: FileRoutesById
@@ -104,6 +116,7 @@ export interface RootRouteChildren {
   ApiPublicGuideRoute: typeof ApiPublicGuideRoute
   ApiPublicHandoffRoute: typeof ApiPublicHandoffRoute
   ApiPublicInspectRoute: typeof ApiPublicInspectRoute
+  ApiPublicResearchRoute: typeof ApiPublicResearchRoute
   ApiPublicSpeakRoute: typeof ApiPublicSpeakRoute
   ApiPublicTranscribeRoute: typeof ApiPublicTranscribeRoute
 }
@@ -138,6 +151,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicInspectRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/research': {
+      id: '/api/public/research'
+      path: '/api/public/research'
+      fullPath: '/api/public/research'
+      preLoaderRoute: typeof ApiPublicResearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/speak': {
       id: '/api/public/speak'
       path: '/api/public/speak'
@@ -160,6 +180,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicGuideRoute: ApiPublicGuideRoute,
   ApiPublicHandoffRoute: ApiPublicHandoffRoute,
   ApiPublicInspectRoute: ApiPublicInspectRoute,
+  ApiPublicResearchRoute: ApiPublicResearchRoute,
   ApiPublicSpeakRoute: ApiPublicSpeakRoute,
   ApiPublicTranscribeRoute: ApiPublicTranscribeRoute,
 }
