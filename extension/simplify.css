@@ -1,0 +1,120 @@
+/* Guide Me — Easy Read mode. Everything is scoped to html.guideme-simple
+   so removing the class restores the site exactly. */
+
+html.guideme-simple,
+html.guideme-simple body {
+  background: #ffffff !important;
+  color: #101418 !important;
+}
+
+html.guideme-simple * {
+  letter-spacing: normal !important;
+  text-transform: none !important;
+  text-shadow: none !important;
+  animation: none !important;
+  transition: none !important;
+}
+
+html.guideme-simple p,
+html.guideme-simple li,
+html.guideme-simple span,
+html.guideme-simple div,
+html.guideme-simple td,
+html.guideme-simple dd,
+html.guideme-simple label,
+html.guideme-simple h1,
+html.guideme-simple h2,
+html.guideme-simple h3,
+html.guideme-simple h4 {
+  color: #101418 !important;
+  line-height: 1.75 !important;
+  font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif !important;
+}
+
+html.guideme-simple p,
+html.guideme-simple li {
+  margin-bottom: 0.9em !important;
+  max-width: 46em !important;
+}
+
+html.guideme-simple a {
+  color: #0b47b3 !important;
+  text-decoration: underline !important;
+  text-underline-offset: 3px !important;
+}
+
+html.guideme-simple button,
+html.guideme-simple [role="button"],
+html.guideme-simple input[type="submit"],
+html.guideme-simple input[type="button"],
+html.guideme-simple a.guideme-big-link {
+  min-height: 52px !important;
+  min-width: 52px !important;
+  padding: 12px 20px !important;
+  border-radius: 12px !important;
+  border: 3px solid #101418 !important;
+  background: #ffffff !important;
+  color: #101418 !important;
+  font-weight: 700 !important;
+  line-height: 1.35 !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
+}
+
+html.guideme-simple button:hover,
+html.guideme-simple [role="button"]:hover,
+html.guideme-simple a.guideme-big-link:hover {
+  background: #fff1e6 !important;
+  border-color: #ff6a00 !important;
+}
+
+html.guideme-simple input:not([type="submit"]):not([type="button"]),
+html.guideme-simple select,
+html.guideme-simple textarea {
+  min-height: 52px !important;
+  padding: 10px 14px !important;
+  border: 3px solid #101418 !important;
+  border-radius: 12px !important;
+  background: #ffffff !important;
+  color: #101418 !important;
+}
+
+html.guideme-simple [data-guideme-hidden] {
+  display: none !important;
+}
+
+html.guideme-simple img,
+html.guideme-simple video,
+html.guideme-simple svg {
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+/* the escape hatch — always visible while simplified */
+#guideme-restore {
+  position: fixed !important;
+  right: 18px;
+  bottom: 18px;
+  z-index: 2147483645;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px !important;
+  min-height: 56px !important;
+  border: 3px solid #101418 !important;
+  border-radius: 999px !important;
+  background: #ff6a00 !important;
+  color: #ffffff !important;
+  font: 700 18px/1.2 system-ui, -apple-system, "Segoe UI", Arial, sans-serif !important;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28) !important;
+}
+
+#guideme-restore:hover {
+  background: #e35f00 !important;
+}
+
+html.guideme-fade,
+html.guideme-fade body {
+  transition: opacity 0.22s ease !important;
+}

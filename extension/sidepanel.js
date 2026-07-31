@@ -102,8 +102,15 @@ async function sendToPage(message) {
   try {
     return await chrome.tabs.sendMessage(tab.id, message);
   } catch {
-    await chrome.scripting.executeScript({ target: { tabId: tab.id }, files: ["content.js"] });
-    await chrome.scripting.insertCSS({ target: { tabId: tab.id }, files: ["content.css"] });
+    await chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      files: ["content.js", "simplify.js"],
+    });
+    await chrome.scripting.insertCSS({
+      target: { tabId: tab.id },
+      files: ["content.css", "simplify.css"],
+    });
+
     return await chrome.tabs.sendMessage(tab.id, message);
   }
 }
@@ -256,11 +263,167 @@ document.getElementById("stop-btn").addEventListener("click", async () => {
 
 /* the page moved on — take another look */
 chrome.runtime.onMessage.addListener((msg) => {
+  if (msg?.type === "simplify-changed") {
+    setSimplifyButton(Boolean(msg.on));
+    return;
+  }
+  if (msg?.type === "page-changed") {
+    setSimplifyButton(false);
+    refreshSimplifyState();
+    scheduleGuard(1400);
+  }
   if (!goal) return;
   if (msg?.type === "step-clicked" || msg?.type === "page-changed") {
     setTimeout(() => nextStep(), msg.type === "page-changed" ? 900 : 1200);
   }
 });
+
+/* ---------- Simplify this page ---------- */
+
+const simplifyBtn = document.getElementById("simplify-btn");
+const simplifyText = document.getElementById("simplify-text");
+
+function setSimplifyButton(isOn) {
+  simplifyBtn.setAttribute("aria-pressed", isOn ? "true" : "false");
+  simplifyText.textContent = isOn ? "Back to the normal page" : "Make this page easy to read";
+}
+
+async function refreshSimplifyState() {
+  try {
+    const state = await sendToPage({ type: "simplify-state" });
+    setSimplifyButton(Boolean(state?.on));
+  } catch {
+    setSimplifyButton(false);
+  }
+}
+
+simplifyBtn.addEventListener("click", async () => {
+  simplifyBtn.disabled = true;
+  try {
+    const res = await sendToPage({ type: "simplify-toggle" });
+    setSimplifyButton(Boolean(res?.on));
+    setStatus(res?.on ? "This page is now easier to read." : "Back to the normal page.");
+  } catch {
+    setStatus("I can't change this kind of page. Please open a normal website.");
+  } finally {
+    simplifyBtn.disabled = false;
+  }
+});
+
+/* ---------- Dark pattern & scam guard ---------- */
+
+const guardEl = document.getElementById("guard");
+const guardHeadline = document.getElementById("guard-headline");
+const guardExplanation = document.getElementById("guard-explanation");
+const guardAdvice = document.getElementById("guard-advice");
+const guardAction = document.getElementById("guard-action");
+const guardDismiss = document.getElementById("guard-dismiss");
+
+let guardTimer = null;
+let guardChecking = false;
+let lastGuardUrl = "";
+const dismissedHosts = new Set();
+let guardTarget = null;
+
+function hideGuard() {
+  guardEl.hidden = true;
+  guardEl.classList.remove("scam");
+  guardAction.hidden = true;
+  guardTarget = null;
+}
+
+function showGuard(result, url) {
+  let host = "";
+  try {
+    host = new URL(url).hostname;
+  } catch {
+    /* ignore */
+  }
+  if (dismissedHosts.has(`${host}|${result.headline}`)) return;
+
+  guardEl.hidden = false;
+  guardEl.classList.toggle("scam", result.risk === "scam");
+  guardHeadline.textContent = `\u26A0 ${result.headline}`;
+  guardExplanation.textContent = result.explanation || "";
+  guardAdvice.textContent = result.advice || "";
+  guardEl.dataset.host = host;
+
+  if (result.risk === "scam") {
+    guardTarget = null;
+    guardAction.hidden = false;
+    guardAction.textContent = "Leave this page";
+  } else if (result.realActionElementId) {
+    guardTarget = { id: result.realActionElementId, label: result.realActionLabel || result.headline };
+    guardAction.hidden = false;
+    guardAction.textContent = "Show me the real button";
+  } else {
+    guardTarget = null;
+    guardAction.hidden = true;
+  }
+
+  speak(
+    `${result.headline} ${result.explanation || ""} ${result.advice || ""}`.replace(/\s+/g, " ").trim(),
+  );
+}
+
+guardAction.addEventListener("click", async () => {
+  if (guardTarget) {
+    const res = await sendToPage({
+      type: "highlight",
+      elementId: guardTarget.id,
+      label: guardTarget.label,
+    }).catch(() => null);
+    if (!res?.ok) setStatus("I couldn't point at it — it may have moved.");
+    return;
+  }
+  const tab = await activeTab();
+  if (tab?.id) chrome.tabs.update(tab.id, { url: "https://www.google.com" }).catch(() => {});
+  hideGuard();
+});
+
+guardDismiss.addEventListener("click", () => {
+  const host = guardEl.dataset.host || "";
+  dismissedHosts.add(`${host}|${guardHeadline.textContent.replace(/^\u26A0\s*/, "")}`);
+  hideGuard();
+});
+
+async function runGuard() {
+  if (guardChecking) return;
+  guardChecking = true;
+  try {
+    const page = await sendToPage({ type: "snapshot" }).catch(() => null);
+    if (!page?.url || page.url === lastGuardUrl) return;
+    lastGuardUrl = page.url;
+    if (!/^https?:/i.test(page.url)) return;
+
+    const res = await fetch(`${apiBase}/api/public/inspect`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ page }),
+    });
+    if (!res.ok) return;
+    const result = await res.json().catch(() => null);
+    if (!result || result.risk === "none" || !result.headline) {
+      hideGuard();
+      return;
+    }
+    showGuard(result, page.url);
+  } catch {
+    /* the guard is a bonus; never block the user */
+  } finally {
+    guardChecking = false;
+  }
+}
+
+function scheduleGuard(delay = 1200) {
+  if (guardTimer) clearTimeout(guardTimer);
+  guardTimer = setTimeout(runGuard, delay);
+}
+
+refreshSimplifyState();
+scheduleGuard(1500);
+
+
 
 /* ---------- voice input (WAV via Web Audio) ---------- */
 

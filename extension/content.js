@@ -151,11 +151,51 @@
     return true;
   }
 
+  function isFaint(el) {
+    const s = getComputedStyle(el);
+    const r = el.getBoundingClientRect();
+    const size = parseFloat(s.fontSize) || 16;
+    const weak = /rgba?\(\s*(1[3-9]\d|2\d\d)\s*,\s*(1[3-9]\d|2\d\d)\s*,\s*(1[3-9]\d|2\d\d)/.test(s.color);
+    return size < 14 || r.height < 26 || weak || Number(s.opacity) < 0.8;
+  }
+
+  function snapshotPage() {
+    const scan = scanPage();
+    const headings = Array.from(document.querySelectorAll("h1, h2, h3"))
+      .map((h) => (h.innerText || "").trim())
+      .filter(Boolean)
+      .slice(0, 12);
+
+    const modal = document.querySelector(
+      'dialog[open], [role="dialog"], [role="alertdialog"], [aria-modal="true"]',
+    );
+    const modalText = modal ? (modal.innerText || "").trim().slice(0, 1200) : "";
+
+    const elements = scan.elements.slice(0, 80).map((e) => {
+      const el = document.querySelector(`[data-guide-id="${CSS.escape(e.id)}"]`);
+      return { id: e.id, tag: e.tag, text: e.text, faint: el ? isFaint(el) : false };
+    });
+
+    return {
+      url: location.href,
+      title: document.title.slice(0, 200),
+      headings,
+      modalText,
+      bodyText: (document.body.innerText || "").replace(/\s+/g, " ").trim().slice(0, 3000),
+      elements,
+    };
+  }
+
   chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
     if (msg?.type === "scan") {
       sendResponse(scanPage());
       return true;
     }
+    if (msg?.type === "snapshot") {
+      sendResponse(snapshotPage());
+      return true;
+    }
+
     if (msg?.type === "highlight") {
       sendResponse({ ok: highlight(msg.elementId, msg.label) });
       return true;

@@ -21,8 +21,9 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content.js"],
-      "css": ["content.css"],
+      "js": ["content.js", "simplify.js"],
+      "css": ["content.css", "simplify.css"],
+
       "run_at": "document_idle",
       "all_frames": false
     }

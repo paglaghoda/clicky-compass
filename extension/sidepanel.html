@@ -24,10 +24,28 @@
       <button id="save-settings" class="secondary-btn">Save</button>
     </section>
 
+    <div class="tools">
+      <button id="simplify-btn" class="simplify-btn" aria-pressed="false">
+        <span class="simplify-icon" aria-hidden="true">&#128083;</span>
+        <span id="simplify-text">Make this page easy to read</span>
+      </button>
+    </div>
+
+    <section id="guard" class="guard" hidden>
+      <h2 id="guard-headline"></h2>
+      <p id="guard-explanation"></p>
+      <p id="guard-advice" class="guard-advice"></p>
+      <div class="guard-actions">
+        <button id="guard-action" class="guard-btn" hidden></button>
+        <button id="guard-dismiss" class="guard-btn ghost">Hide this</button>
+      </div>
+    </section>
+
     <section id="progress" class="progress" hidden>
       <div class="progress-text"><span id="step-label">Step 1 of 1</span></div>
       <div class="progress-bar"><div id="progress-fill"></div></div>
     </section>
+
 
     <main id="chat" class="chat" aria-live="polite">
       <div class="bubble assistant welcome">

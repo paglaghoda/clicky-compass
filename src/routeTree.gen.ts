@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiPublicGuideRouteImport } from './routes/api/public/guide'
+import { Route as ApiPublicInspectRouteImport } from './routes/api/public/inspect'
 import { Route as ApiPublicSpeakRouteImport } from './routes/api/public/speak'
 import { Route as ApiPublicTranscribeRouteImport } from './routes/api/public/transcribe'
 
@@ -22,6 +23,11 @@ const IndexRoute = IndexRouteImport.update({
 const ApiPublicGuideRoute = ApiPublicGuideRouteImport.update({
   id: '/api/public/guide',
   path: '/api/public/guide',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicInspectRoute = ApiPublicInspectRouteImport.update({
+  id: '/api/public/inspect',
+  path: '/api/public/inspect',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicSpeakRoute = ApiPublicSpeakRouteImport.update({
@@ -38,12 +44,14 @@ const ApiPublicTranscribeRoute = ApiPublicTranscribeRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/api/public/guide': typeof ApiPublicGuideRoute
+  '/api/public/inspect': typeof ApiPublicInspectRoute
   '/api/public/speak': typeof ApiPublicSpeakRoute
   '/api/public/transcribe': typeof ApiPublicTranscribeRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/api/public/guide': typeof ApiPublicGuideRoute
+  '/api/public/inspect': typeof ApiPublicInspectRoute
   '/api/public/speak': typeof ApiPublicSpeakRoute
   '/api/public/transcribe': typeof ApiPublicTranscribeRoute
 }
@@ -51,19 +59,30 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/api/public/guide': typeof ApiPublicGuideRoute
+  '/api/public/inspect': typeof ApiPublicInspectRoute
   '/api/public/speak': typeof ApiPublicSpeakRoute
   '/api/public/transcribe': typeof ApiPublicTranscribeRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/api/public/guide' | '/api/public/speak' | '/api/public/transcribe'
+    | '/'
+    | '/api/public/guide'
+    | '/api/public/inspect'
+    | '/api/public/speak'
+    | '/api/public/transcribe'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/public/guide' | '/api/public/speak' | '/api/public/transcribe'
+  to:
+    | '/'
+    | '/api/public/guide'
+    | '/api/public/inspect'
+    | '/api/public/speak'
+    | '/api/public/transcribe'
   id:
     | '__root__'
     | '/'
     | '/api/public/guide'
+    | '/api/public/inspect'
     | '/api/public/speak'
     | '/api/public/transcribe'
   fileRoutesById: FileRoutesById
@@ -71,6 +90,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ApiPublicGuideRoute: typeof ApiPublicGuideRoute
+  ApiPublicInspectRoute: typeof ApiPublicInspectRoute
   ApiPublicSpeakRoute: typeof ApiPublicSpeakRoute
   ApiPublicTranscribeRoute: typeof ApiPublicTranscribeRoute
 }
@@ -89,6 +109,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/guide'
       fullPath: '/api/public/guide'
       preLoaderRoute: typeof ApiPublicGuideRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/inspect': {
+      id: '/api/public/inspect'
+      path: '/api/public/inspect'
+      fullPath: '/api/public/inspect'
+      preLoaderRoute: typeof ApiPublicInspectRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/speak': {
@@ -111,19 +138,10 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ApiPublicGuideRoute: ApiPublicGuideRoute,
+  ApiPublicInspectRoute: ApiPublicInspectRoute,
   ApiPublicSpeakRoute: ApiPublicSpeakRoute,
   ApiPublicTranscribeRoute: ApiPublicTranscribeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
