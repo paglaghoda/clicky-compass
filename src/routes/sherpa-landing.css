@@ -7,6 +7,7 @@
   --orange-deep: #B84E10;
   --orange-glow: #FBE0C7;
   --sage: #7C9070;
+  --sage-pole: #E7EEDF;
   --sage-pale: #E7EEDF;
   --forest: #2F4A32;
   --line: #DCD3BE;
@@ -23,14 +24,12 @@ html:has(.sherpa-landing) {
   & * {
     box-sizing:border-box; margin:0; padding:0;
   }
-  .sherpa-landing {
-    background:var(--paper);
-    color:var(--ink);
-    font-family:var(--sans);
-    font-size:19px;
-    line-height:1.6;
-    -webkit-font-smoothing:antialiased;
-  }
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:19px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
   & img {
     max-width:100%; display:block;
   }
@@ -43,8 +42,8 @@ html:has(.sherpa-landing) {
   & .wrap-narrow {
     max-width:840px; margin:0 auto; padding:0 32px;
   }
-  & /* ---------- Focus visibility (accessibility floor) ---------- */
-  a:focus-visible, button:focus-visible {
+  /* ---------- Focus visibility (accessibility floor) ---------- */
+  & a:focus-visible, button:focus-visible {
     outline:3px solid var(--forest);
     outline-offset:4px;
     border-radius:6px;
@@ -54,8 +53,8 @@ html:has(.sherpa-landing) {
       animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important;
     }
   }
-  & /* ---------- Top bar ---------- */
-  .topbar {
+  /* ---------- Top bar ---------- */
+  & .topbar {
     position:sticky; top:0; z-index:50;
     background:rgba(251,247,239,0.92);
     backdrop-filter:blur(6px);
@@ -92,8 +91,8 @@ html:has(.sherpa-landing) {
   & .top-cta:hover {
     background:var(--orange-deep);
   }
-  & /* ---------- Hero ---------- */
-  .hero {
+  /* ---------- Hero ---------- */
+  & .hero {
     padding:76px 0 40px;
     position:relative;
   }
@@ -191,8 +190,8 @@ html:has(.sherpa-landing) {
   & .browsers-line strong {
     color:var(--ink); font-weight:700;
   }
-  & /* ---------- Hero visual: the pointer demo ---------- */
-  .demo {
+  /* ---------- Hero visual: the pointer demo ---------- */
+  & .demo {
     background:var(--white);
     border:1px solid var(--line);
     border-radius:20px;
@@ -219,7 +218,7 @@ html:has(.sherpa-landing) {
     border:1px solid var(--line);
     flex:1;
   }
-  & .demo-.sherpa-landing {
+  & .demo-body {
     padding:34px 30px 44px;
     position:relative;
     min-height:280px;
@@ -288,8 +287,8 @@ html:has(.sherpa-landing) {
   & .speaker-icon {
     flex-shrink:0; margin-top:2px;
   }
-  & /* ---------- Section shell ---------- */
-  section {
+  /* ---------- Section shell ---------- */
+  & section {
     padding:88px 0;
   }
   & .section-head {
@@ -319,8 +318,8 @@ html:has(.sherpa-landing) {
     margin-top:16px;
     line-height:1.6;
   }
-  & /* ---------- Feature blocks (alternating) ---------- */
-  .feature {
+  /* ---------- Feature blocks (alternating) ---------- */
+  & .feature {
     display:grid;
     grid-template-columns:1fr 1fr;
     gap:70px;
@@ -374,8 +373,8 @@ html:has(.sherpa-landing) {
     flex-direction:column;
     justify-content:center;
   }
-  & /* Big Button illustration */
-  .before-after {
+  /* Big Button illustration */
+  & .before-after {
     display:flex; gap:18px; align-items:stretch;
   }
   & .ba-panel {
@@ -404,8 +403,8 @@ html:has(.sherpa-landing) {
     font-size:26px;
     color:var(--orange-deep);
   }
-  & /* Scam warning illustration */
-  .warn-card {
+  /* Scam warning illustration */
+  & .warn-card {
     background:#FFF7EE;
     border:2px solid var(--orange);
     border-radius:12px;
@@ -425,11 +424,11 @@ html:has(.sherpa-landing) {
   & .warn-text-title {
     font-weight:700; font-size:18px; margin-bottom:6px; color:var(--orange-deep);
   }
-  & .warn-text-.sherpa-landing {
+  & .warn-text-body {
     font-size:16px; color:var(--ink-soft); line-height:1.55;
   }
-  & /* Voice illustration */
-  .mic-wrap {
+  /* Voice illustration */
+  & .mic-wrap {
     display:flex; flex-direction:column; align-items:center; gap:20px; padding:20px 0;
   }
   & .mic-circle {
@@ -447,8 +446,8 @@ html:has(.sherpa-landing) {
     text-align:center;
     max-width:30ch;
   }
-  & /* Family message illustration */
-  .msg-bubble {
+  /* Family message illustration */
+  & .msg-bubble {
     background:var(--sage-pale);
     border:1px solid #CBDABF;
     border-radius:16px 16px 16px 4px;
@@ -461,8 +460,8 @@ html:has(.sherpa-landing) {
   & .msg-bubble + .msg-bubble {
     margin-top:14px; margin-left:auto; border-radius:16px 16px 4px 16px; background:var(--paper-dim); color:var(--ink-soft); border-color:var(--line);
   }
-  & /* Record illustration */
-  .log-row {
+  /* Record illustration */
+  & .log-row {
     display:flex; align-items:center; gap:14px;
     padding:14px 0;
     border-bottom:1px solid var(--paper-dim);
@@ -479,8 +478,8 @@ html:has(.sherpa-landing) {
   & .log-date {
     font-size:14px; color:var(--ink-soft); margin-left:auto; white-space:nowrap;
   }
-  & /* ---------- How it works ---------- */
-  .steps-band {
+  /* ---------- How it works ---------- */
+  & .steps-band {
     background:var(--ink);
     color:var(--paper);
   }
@@ -527,8 +526,8 @@ html:has(.sherpa-landing) {
   & .steps-note a {
     color:var(--orange); text-decoration:underline;
   }
-  & /* ---------- Big CTA / download ---------- */
-  .cta-band {
+  /* ---------- Big CTA / download ---------- */
+  & .cta-band {
     text-align:center;
     padding:100px 0;
     position:relative;
@@ -566,8 +565,8 @@ html:has(.sherpa-landing) {
   & .compat-row strong {
     color:var(--ink);
   }
-  & /* ---------- Footer ---------- */
-  footer {
+  /* ---------- Footer ---------- */
+  & footer {
     border-top:1px solid var(--line);
     padding:44px 0;
   }
@@ -580,18 +579,26 @@ html:has(.sherpa-landing) {
   & .footer-note {
     font-size:15px; color:var(--ink-soft);
   }
-  & /* ---------- Responsive ---------- */
-  @media (max-width:960px) {
-    .hero-grid{grid-template-columns:1fr; gap:44px;}
-    .feature, .feature.reverse{grid-template-columns:1fr;}
-    .feature.reverse .feature-art{order:1;}
-    .feature.reverse .feature-text{order:2;}
-    .steps-grid{grid-template-columns:1fr 1fr;}
+  /* ---------- Responsive ---------- */
+  & @media (max-width:960px) {
+    & .hero-grid {
+      grid-template-columns:1fr; gap:44px;
+    }
+    & .feature, .feature.reverse {
+      grid-template-columns:1fr;
+    }
+    & .feature.reverse .feature-art {
+      order:1;
+    }
+    & .feature.reverse .feature-text {
+      order:2;
+    }
+    & .steps-grid {
+      grid-template-columns:1fr 1fr;
+    }
   }
   & @media (max-width:640px) {
-    .sherpa-landing {
-      font-size:18px;
-    }
+    font-size:18px;
     & .wrap, .wrap-narrow {
       padding:0 20px;
     }
