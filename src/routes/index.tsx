@@ -78,7 +78,29 @@ function Install() {
               delivery site asking for your details.
             </p>
           </div>
+          <div className="rounded-2xl border-2 border-[#d8e0ec] bg-white p-5">
+            <h3 className="text-2xl font-black">Just say it out loud</h3>
+            <p className="mt-2 text-xl leading-relaxed">
+              Hold the big orange microphone button and say what you want to do. No typing, no small
+              keyboards.
+            </p>
+          </div>
+          <div className="rounded-2xl border-2 border-[#d8e0ec] bg-white p-5">
+            <h3 className="text-2xl font-black">Ask a family member</h3>
+            <p className="mt-2 text-xl leading-relaxed">
+              One button writes a clear message explaining what you are trying to do, along with a
+              picture of your screen, ready to send on WhatsApp, a text message or email.
+            </p>
+          </div>
+          <div className="rounded-2xl border-2 border-[#d8e0ec] bg-white p-5">
+            <h3 className="text-2xl font-black">A simple record of what you did</h3>
+            <p className="mt-2 text-xl leading-relaxed">
+              “You cancelled Amazon Prime on Tuesday.” A plain list of recent things you have done,
+              kept only on your own computer.
+            </p>
+          </div>
         </div>
+
 
 
         <button
