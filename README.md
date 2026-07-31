@@ -1,4 +1,4 @@
-#Sherpa
+# Sherpa
 
 Tell Sherpa what you're trying to do — "cancel my Amazon Prime" — and a big orange arrow shows you exactly what to click next. One step at a time. Read aloud, slowly and clearly. You stay in control the whole way.
 
