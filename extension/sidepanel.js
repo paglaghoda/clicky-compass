@@ -102,8 +102,15 @@ async function sendToPage(message) {
   try {
     return await chrome.tabs.sendMessage(tab.id, message);
   } catch {
-    await chrome.scripting.executeScript({ target: { tabId: tab.id }, files: ["content.js"] });
-    await chrome.scripting.insertCSS({ target: { tabId: tab.id }, files: ["content.css"] });
+    await chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      files: ["content.js", "simplify.js"],
+    });
+    await chrome.scripting.insertCSS({
+      target: { tabId: tab.id },
+      files: ["content.css", "simplify.css"],
+    });
+
     return await chrome.tabs.sendMessage(tab.id, message);
   }
 }
