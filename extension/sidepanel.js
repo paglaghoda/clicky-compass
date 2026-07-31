@@ -155,10 +155,15 @@ async function nextStep(userText) {
 
     if (userText) history.push({ role: "user", content: userText });
 
+    // Did the page actually move on since the last step? If not, we're going in circles.
+    if (page?.url && page.url === lastSeenUrl) noProgress += 1;
+    else noProgress = 0;
+    lastSeenUrl = page?.url || "";
+
     const res = await fetch(`${apiBase}/api/public/guide`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ goal, history, page }),
+      body: JSON.stringify({ goal, history, page, research, noProgress }),
     });
 
     const data = await res.json().catch(() => ({}));
@@ -185,6 +190,14 @@ async function nextStep(userText) {
       await sendToPage({ type: "clear" }).catch(() => {});
     }
 
+    if (data.stuck && !data.done) {
+      // Stop hunting. Say so honestly and offer a way out.
+      await logActivity(`Sherpa could not do this here: ${goal}`);
+      setStatus("You can ask a family member from the menu if you'd like a hand.");
+      goal = "";
+      await sendToPage({ type: "clear" }).catch(() => {});
+    }
+
     if (data.done) {
       await logActivity(`You finished: ${goal}`);
       goal = "";
@@ -198,14 +211,49 @@ async function nextStep(userText) {
   }
 }
 
+/* Check the website's own help pages BEFORE guessing our way around menus. */
+async function checkFirst(text) {
+  research = null;
+  try {
+    const tab = await activeTab();
+    const res = await fetch(`${apiBase}/api/public/research`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ goal: text, url: tab?.url || "", title: tab?.title || "" }),
+    });
+    if (!res.ok) return;
+    const data = await res.json().catch(() => null);
+    if (data && data.feasible) research = data;
+  } catch {
+    /* research is a helper, never a blocker */
+  }
+}
+
 async function startGoal(text) {
   goal = text;
   history = [];
+  research = null;
+  noProgress = 0;
+  lastSeenUrl = "";
   if (inputEl) inputEl.value = "";
   heardEl.hidden = true;
+  setView("guiding");
+  showThinking();
+  setStatus("Let me check how this is done...");
   await logActivity(`You asked for help to: ${text}`);
+  await checkFirst(text);
+  if (research?.plainAnswer && research.feasible !== "yes") {
+    hideThinking();
+    setStatus("");
+    showStep(research.plainAnswer);
+    speak(research.plainAnswer);
+    await logActivity(`Sherpa checked: ${text} — not possible on this website.`);
+    goal = "";
+    return;
+  }
   await nextStep(`I want to: ${text}`);
 }
+
 
 sendBtn.addEventListener("click", () => {
   const text = inputEl.value.trim();
