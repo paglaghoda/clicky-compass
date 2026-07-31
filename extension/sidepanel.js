@@ -138,6 +138,8 @@ async function nextStep(userText) {
   if (busy) return;
   busy = true;
   sendBtn.disabled = true;
+  micBtn.disabled = true;
+  showThinking();
   setStatus("Looking at this page...");
 
   try {
@@ -145,6 +147,7 @@ async function nextStep(userText) {
     try {
       page = await sendToPage({ type: "scan" });
     } catch {
+      hideThinking();
       setStatus("");
       addBubble(
         "I can't read this page. Chrome doesn't let me help on this kind of page — please open a normal website first.",
@@ -163,11 +166,13 @@ async function nextStep(userText) {
 
     const data = await res.json().catch(() => ({}));
     if (!res.ok) {
+      hideThinking();
       setStatus("");
       addBubble(data.error || "Something went wrong. Please try again.", "assistant");
       return;
     }
 
+    hideThinking();
     setStatus("");
     history.push({ role: "assistant", content: data.instruction });
     addBubble(data.instruction, "assistant", { step: true, warning: data.warning });
@@ -196,6 +201,7 @@ async function nextStep(userText) {
   } finally {
     busy = false;
     sendBtn.disabled = false;
+    micBtn.disabled = false;
     inputEl.focus();
   }
 }
@@ -242,6 +248,7 @@ document.getElementById("stop-btn").addEventListener("click", async () => {
   history = [];
   controlsEl.hidden = true;
   progressEl.hidden = true;
+  hideThinking();
   if (audioEl) audioEl.pause();
   await sendToPage({ type: "clear" }).catch(() => {});
   addBubble("Alright, we've stopped. Tell me any time if you'd like help with something else.", "assistant");
