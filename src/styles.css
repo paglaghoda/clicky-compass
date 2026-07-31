@@ -59,6 +59,15 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Sherpa brand tokens */
+  --color-sherpa-cream: var(--sherpa-cream);
+  --color-sherpa-orange: var(--sherpa-orange);
+  --color-sherpa-navy: var(--sherpa-navy);
+  --color-sherpa-slate: var(--sherpa-slate);
+  --color-sherpa-soft: var(--sherpa-soft);
+  --font-display: var(--font-display-family);
+  --font-body: var(--font-body-family);
 }
 
 :root {
