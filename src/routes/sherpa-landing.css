@@ -42,12 +42,12 @@ html:has(.sherpa-landing) {
     max-width:840px; margin:0 auto; padding:0 32px;
   }
   /* ---------- Focus visibility (accessibility floor) ---------- */
-  & a:focus-visible, button:focus-visible {
+  & a:focus-visible, & button:focus-visible {
     outline:3px solid var(--forest);
     outline-offset:4px;
     border-radius:6px;
   }
-  & @media (prefers-reduced-motion: reduce) {
+  @media (prefers-reduced-motion: reduce) {
     & * {
       animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important;
     }
@@ -579,7 +579,7 @@ html:has(.sherpa-landing) {
     font-size:15px; color:var(--ink-soft);
   }
   /* ---------- Responsive ---------- */
-  & @media (max-width:960px) {
+  @media (max-width:960px) {
     & .hero-grid {
       grid-template-columns:1fr; gap:44px;
     }
@@ -596,7 +596,7 @@ html:has(.sherpa-landing) {
       grid-template-columns:1fr 1fr;
     }
   }
-  & @media (max-width:640px) {
+  @media (max-width:640px) {
     & {
       font-size:18px;
     }
