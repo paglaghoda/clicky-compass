@@ -61,6 +61,26 @@ function Install() {
           Guide Me never clicks anything for you. You stay in control the whole way.
         </p>
 
+        <div className="mt-8 space-y-4">
+          <div className="rounded-2xl border-2 border-[#d8e0ec] bg-white p-5">
+            <h3 className="text-2xl font-black">Make this page easy to read</h3>
+            <p className="mt-2 text-xl leading-relaxed">
+              One big button makes the text larger and clearer, darkens it for better contrast, grows
+              the buttons, and quietly puts away pop-ups, adverts and videos that play by themselves.
+              Press it again to put the page back exactly as it was.
+            </p>
+          </div>
+          <div className="rounded-2xl border-2 border-[#d8e0ec] bg-white p-5">
+            <h3 className="text-2xl font-black">Watches out for tricks and scams</h3>
+            <p className="mt-2 text-xl leading-relaxed">
+              Guide Me warns you in plain words when a page is trying to make it hard to say no — and
+              points at the real cancel button. It also speaks up when a page looks like a fake bank or
+              delivery site asking for your details.
+            </p>
+          </div>
+        </div>
+
+
         <button
           onClick={download}
           className="mt-10 w-full rounded-2xl bg-[#ff6a00] px-8 py-6 text-2xl font-black text-white shadow-lg transition hover:brightness-110"
