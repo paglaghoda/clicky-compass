@@ -17,6 +17,8 @@ type GuideRequest = {
   goal?: string;
   history?: { role: "user" | "assistant"; content: string }[];
   page?: { url?: string; title?: string; elements?: GuideElement[] };
+  research?: { feasible?: string; plainAnswer?: string; route?: string[]; sourceUrl?: string | null };
+  noProgress?: number;
 };
 
 const SYSTEM_PROMPT = `You are "Guide Me", a patient assistant that helps elderly people use websites.
@@ -33,8 +35,14 @@ Rules:
 - stepNumber/totalSteps are your best estimate of progress toward the goal.
 - If the goal now looks complete, set done to true and congratulate them.
 
+Being honest beats hunting:
+- If this website does not offer what they asked for, say so plainly and set stuck to true. "This website does not let you do that" is a correct and helpful answer — never invent a menu path or keep opening menus hoping something appears.
+- If you have already looked around and nothing on this site moves the goal forward, set stuck to true and suggest asking a family member or trying somewhere else.
+- If a KNOWN ROUTE is given below, follow it in order instead of guessing.
+
 Respond with ONLY a JSON object:
-{"instruction":string,"spokenText":string,"elementId":string|null,"stepNumber":number,"totalSteps":number,"warning":string|null,"done":boolean}`;
+{"instruction":string,"spokenText":string,"elementId":string|null,"stepNumber":number,"totalSteps":number,"warning":string|null,"done":boolean,"stuck":boolean}`;
+
 
 export const Route = createFileRoute("/api/public/guide")({
   server: {
