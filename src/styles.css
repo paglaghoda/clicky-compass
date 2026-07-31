@@ -59,6 +59,15 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Sherpa brand tokens */
+  --color-sherpa-cream: var(--sherpa-cream);
+  --color-sherpa-orange: var(--sherpa-orange);
+  --color-sherpa-navy: var(--sherpa-navy);
+  --color-sherpa-slate: var(--sherpa-slate);
+  --color-sherpa-soft: var(--sherpa-soft);
+  --font-display: var(--font-display-family);
+  --font-body: var(--font-body-family);
 }
 
 :root {
@@ -95,6 +104,15 @@
   --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
   --sidebar-border: oklch(0.929 0.013 255.508);
   --sidebar-ring: oklch(0.704 0.04 256.788);
+
+  /* Sherpa brand palette */
+  --sherpa-cream: #fbfaf7;
+  --sherpa-orange: #ff6a00;
+  --sherpa-navy: #12203a;
+  --sherpa-slate: #4b5a72;
+  --sherpa-soft: #d8e0ec;
+  --font-display-family: "DM Serif Display", Georgia, serif;
+  --font-body-family: "Fira Sans", system-ui, sans-serif;
 }
 
 .dark {

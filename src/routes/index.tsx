@@ -3,34 +3,69 @@ import { createFileRoute } from "@tanstack/react-router";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Guide Me — Website Helper for Chrome" },
+      { title: "Sherpa — The Browser That Guides You" },
       {
         name: "description",
         content:
-          "A Chrome sidebar helper that points at exactly what to click on any website and reads each step aloud. Built for people who find websites confusing.",
+          "Sherpa is a web browser built for older adults. Say what you want to do and a big orange arrow points at exactly what to click next, one step at a time.",
       },
-      { property: "og:title", content: "Guide Me — Website Helper for Chrome" },
+      { property: "og:title", content: "Sherpa — The Browser That Guides You" },
       {
         property: "og:description",
         content:
-          "Say what you want to do and Guide Me shows a big arrow at the next thing to click, on any website.",
+          "A web browser for older adults. Speak your goal and Sherpa highlights the next button to press, reads each step aloud, and watches out for scams.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://sherpa.paglaghoda.dev" }],
   }),
-  component: Install,
+  component: LandingPage,
 });
 
-const steps = [
-  "Press the orange Download button, then unzip the file (double-click it).",
-  "Open a new tab and go to chrome://extensions",
-  "Turn on “Developer mode” using the switch in the top-right corner.",
-  "Click “Load unpacked” and choose the folder you unzipped.",
-  "Open any website, click the Guide Me icon, and tell it what you want to do.",
+const installSteps = [
+  "Press the orange Download button to save the Sherpa installer.",
+  "Open the downloaded file and follow the simple setup steps.",
+  "When asked, choose whether to make Sherpa your everyday browser.",
+  "Open Sherpa, go to any website, and say what you would like to do.",
 ];
 
-function Install() {
+const features = [
+  {
+    title: "It points the way",
+    body: "Say what you want — like “cancel my Amazon Prime subscription” — and a big orange arrow shows exactly what to click next, one step at a time.",
+  },
+  {
+    title: "Speaks every step",
+    body: "Each instruction is read out loud, slowly and clearly. No squinting at small text or guessing what a button does.",
+  },
+  {
+    title: "You stay in control",
+    body: "Sherpa never clicks anything for you. It only highlights and explains, so you decide what to press.",
+  },
+  {
+    title: "Make any page easy to read",
+    body: "One big button makes text larger and darker, grows buttons, and quietly hides pop-ups, adverts and videos that play by themselves.",
+  },
+  {
+    title: "Watches out for tricks and scams",
+    body: "Sherpa warns you in plain words when a page is trying to make it hard to say no, and speaks up when a site looks like a fake bank or delivery page.",
+  },
+  {
+    title: "Just say it out loud",
+    body: "Hold the big orange microphone button and say what you want to do. No typing, no small keyboards.",
+  },
+  {
+    title: "Ask a family member",
+    body: "One button writes a clear message explaining what you are trying to do, along with a picture of your screen, ready to send on WhatsApp, text or email.",
+  },
+  {
+    title: "A simple record of what you did",
+    body: "“You cancelled Amazon Prime on Tuesday.” A plain list of recent things you have done, kept only on your own computer.",
+  },
+];
+
+function LandingPage() {
   const download = () => {
     fetch("/guide-me-extension.zip")
       .then((res) => {
@@ -40,7 +75,7 @@ function Install() {
       .then((blob) => {
         const a = document.createElement("a");
         a.href = URL.createObjectURL(blob);
-        a.download = "guide-me-extension.zip";
+        a.download = "sherpa-browser.zip";
         a.click();
         URL.revokeObjectURL(a.href);
       })
@@ -48,84 +83,87 @@ function Install() {
   };
 
   return (
-    <div className="min-h-screen bg-[#fbfaf7] text-[#12203a]">
-      <main className="mx-auto max-w-2xl px-6 py-16">
-        <p className="text-lg font-bold uppercase tracking-widest text-[#ff6a00]">Chrome extension</p>
-        <h1 className="mt-3 text-5xl font-black leading-tight">Guide Me</h1>
-        <p className="mt-5 text-2xl leading-relaxed">
-          Say what you want to do — like “cancel my Amazon Prime subscription” — and a big orange arrow
-          points at exactly what to click next, one step at a time, on any website. Each step is read
-          out loud, slowly and clearly.
-        </p>
-        <p className="mt-4 text-xl text-[#4b5a72]">
-          Guide Me never clicks anything for you. You stay in control the whole way.
-        </p>
+    <div className="min-h-screen bg-sherpa-cream font-body text-sherpa-navy">
+      <main className="mx-auto max-w-5xl px-6 py-16 md:py-24">
+        {/* Hero */}
+        <section className="text-center">
+          <p className="text-lg font-semibold uppercase tracking-widest text-sherpa-orange">
+            A web browser for older adults
+          </p>
+          <h1 className="mt-5 font-display text-5xl font-normal leading-[1.1] md:text-7xl">
+            The browser that guides you
+          </h1>
+          <p className="mx-auto mt-6 max-w-3xl text-2xl leading-relaxed md:text-3xl">
+            Tell Sherpa what you want to do — like “cancel my Amazon Prime subscription” — and it
+            points at exactly what to click next, one step at a time, on any website.
+          </p>
+          <p className="mx-auto mt-5 max-w-2xl text-xl leading-relaxed text-sherpa-slate md:text-2xl">
+            Sherpa never clicks anything for you. You stay in control the whole way.
+          </p>
 
-        <div className="mt-8 space-y-4">
-          <div className="rounded-2xl border-2 border-[#d8e0ec] bg-white p-5">
-            <h3 className="text-2xl font-black">Make this page easy to read</h3>
-            <p className="mt-2 text-xl leading-relaxed">
-              One big button makes the text larger and clearer, darkens it for better contrast, grows
-              the buttons, and quietly puts away pop-ups, adverts and videos that play by themselves.
-              Press it again to put the page back exactly as it was.
-            </p>
+          <button
+            onClick={download}
+            className="mt-10 inline-flex w-full max-w-md items-center justify-center rounded-2xl bg-sherpa-orange px-8 py-6 text-2xl font-bold text-white shadow-lg transition hover:brightness-110 md:w-auto md:text-3xl"
+          >
+            Download Sherpa
+          </button>
+
+          <p className="mt-4 text-base text-sherpa-slate md:text-lg">
+            Free for Windows and Mac.
+          </p>
+        </section>
+
+        {/* Feature grid */}
+        <section className="mt-20 md:mt-28">
+          <h2 className="text-center font-display text-3xl font-normal md:text-4xl">
+            Everything you need, said simply
+          </h2>
+          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {features.map((feature) => (
+              <div
+                key={feature.title}
+                className="rounded-2xl border-2 border-sherpa-soft bg-white p-6"
+              >
+                <h3 className="font-display text-2xl font-normal leading-tight">{feature.title}</h3>
+                <p className="mt-3 text-lg leading-relaxed text-sherpa-slate">{feature.body}</p>
+              </div>
+            ))}
           </div>
-          <div className="rounded-2xl border-2 border-[#d8e0ec] bg-white p-5">
-            <h3 className="text-2xl font-black">Watches out for tricks and scams</h3>
-            <p className="mt-2 text-xl leading-relaxed">
-              Guide Me warns you in plain words when a page is trying to make it hard to say no — and
-              points at the real cancel button. It also speaks up when a page looks like a fake bank or
-              delivery site asking for your details.
-            </p>
-          </div>
-          <div className="rounded-2xl border-2 border-[#d8e0ec] bg-white p-5">
-            <h3 className="text-2xl font-black">Just say it out loud</h3>
-            <p className="mt-2 text-xl leading-relaxed">
-              Hold the big orange microphone button and say what you want to do. No typing, no small
-              keyboards.
-            </p>
-          </div>
-          <div className="rounded-2xl border-2 border-[#d8e0ec] bg-white p-5">
-            <h3 className="text-2xl font-black">Ask a family member</h3>
-            <p className="mt-2 text-xl leading-relaxed">
-              One button writes a clear message explaining what you are trying to do, along with a
-              picture of your screen, ready to send on WhatsApp, a text message or email.
-            </p>
-          </div>
-          <div className="rounded-2xl border-2 border-[#d8e0ec] bg-white p-5">
-            <h3 className="text-2xl font-black">A simple record of what you did</h3>
-            <p className="mt-2 text-xl leading-relaxed">
-              “You cancelled Amazon Prime on Tuesday.” A plain list of recent things you have done,
-              kept only on your own computer.
-            </p>
-          </div>
-        </div>
+        </section>
 
+        {/* How to install */}
+        <section className="mt-20 md:mt-28">
+          <h2 className="text-center font-display text-3xl font-normal md:text-4xl">
+            How to install it
+          </h2>
+          <ol className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {installSteps.map((step, i) => (
+              <li
+                key={step}
+                className="rounded-2xl border-2 border-sherpa-soft bg-white p-6"
+              >
+                <span className="flex h-12 w-12 items-center justify-center rounded-full bg-sherpa-navy text-xl font-bold text-white">
+                  {i + 1}
+                </span>
+                <p className="mt-4 text-lg leading-relaxed">{step}</p>
+              </li>
+            ))}
+          </ol>
+        </section>
 
-
-        <button
-          onClick={download}
-          className="mt-10 w-full rounded-2xl bg-[#ff6a00] px-8 py-6 text-2xl font-black text-white shadow-lg transition hover:brightness-110"
-        >
-          Download Guide Me
-        </button>
-
-        <h2 className="mt-14 text-3xl font-black">How to install it</h2>
-        <ol className="mt-6 space-y-5">
-          {steps.map((step, i) => (
-            <li key={step} className="flex gap-4 rounded-2xl border-2 border-[#d8e0ec] bg-white p-5">
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#12203a] text-xl font-black text-white">
-                {i + 1}
-              </span>
-              <span className="text-xl leading-relaxed">{step}</span>
-            </li>
-          ))}
-        </ol>
-
-        <p className="mt-10 text-lg text-[#4b5a72]">
-          Works in Chrome, Edge, Brave, Arc and Opera. If the helper ever says it cannot reach the
-          assistant, open the gear icon in the sidebar and check the helper address.
-        </p>
+        {/* Final CTA */}
+        <section className="mt-20 text-center md:mt-28">
+          <button
+            onClick={download}
+            className="inline-flex w-full max-w-md items-center justify-center rounded-2xl bg-sherpa-orange px-8 py-6 text-2xl font-bold text-white shadow-lg transition hover:brightness-110 md:w-auto md:text-3xl"
+          >
+            Download Sherpa
+          </button>
+          <p className="mt-6 text-lg leading-relaxed text-sherpa-slate">
+            Works on Windows and Mac. If Sherpa ever says it cannot reach the assistant, open the
+            settings menu and check the helper address.
+          </p>
+        </section>
       </main>
     </div>
   );
