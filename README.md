@@ -1,18 +1,10 @@
-# Web Navigator Buddy
+#Sherpa
 
-Build a chrome extension which has a chat like interface on the right side as a sidebar kinda as well as voice interface kinda like chatgpt or clauded chrome extension and perplexity browser type, the user enters the action, like cancel amazon prime subscription, then there are big arrows and highlighters on things that needs to be clicked in order ot cancel the subscrption . and not only amazon, any live website available on the internet and it can help to do anything for the older people who do not know how to navigate websites. the whole pirpose of the extension is it hlps elderly people navigate complex sites and make them accomplish tough tasks, without needing human help.
+Tell Sherpa what you're trying to do — "cancel my Amazon Prime" — and a big orange arrow shows you exactly what to click next. One step at a time. Read aloud, slowly and clearly. You stay in control the whole way.
 
-This project was built with [Lovable](https://lovable.dev).
+### Helping your older Loved ones navigate the complex Internet on their own
 
-**Live app**: https://clicky-compass.lovable.app
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/3b888ca9-b53a-4718-9cfe-5bc30531c13a).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+**Live app**: [https://sherpa.paglaghoda.dev](https://sherpa.paglaghoda.dev)
 
 ## Development
 
