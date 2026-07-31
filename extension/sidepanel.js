@@ -341,6 +341,7 @@ async function stopRecording() {
     return;
   }
 
+  showThinking();
   setStatus("Understanding what you said...");
   try {
     const form = new FormData();
@@ -348,13 +349,16 @@ async function stopRecording() {
     const res = await fetch(`${apiBase}/api/public/transcribe`, { method: "POST", body: form });
     const data = await res.json().catch(() => ({}));
     if (!res.ok || !data.text) {
+      hideThinking();
       setStatus(data.error || "I couldn't understand that. Please try again.");
       return;
     }
+    hideThinking();
     setStatus("");
     inputEl.value = data.text;
     submit();
   } catch {
+    hideThinking();
     setStatus("I couldn't hear that. Please try again.");
   }
 }
