@@ -13,6 +13,7 @@ const stepLabel = document.getElementById("step-label");
 const progressFill = document.getElementById("progress-fill");
 const settingsPanel = document.getElementById("settings");
 const apiBaseInput = document.getElementById("api-base");
+const thinkingEl = document.getElementById("thinking");
 
 let apiBase = DEFAULT_API_BASE;
 let goal = "";
@@ -20,6 +21,17 @@ let history = [];
 let lastSpoken = "";
 let busy = false;
 let audioEl = null;
+
+function showThinking() {
+  if (thinkingEl) {
+    thinkingEl.hidden = false;
+    chatEl.scrollTop = chatEl.scrollHeight;
+  }
+}
+
+function hideThinking() {
+  if (thinkingEl) thinkingEl.hidden = true;
+}
 
 /* ---------- settings ---------- */
 
