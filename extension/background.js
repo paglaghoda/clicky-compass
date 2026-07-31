@@ -1,4 +1,4 @@
-// Guide Me — background service worker
+// Sherpa — background service worker
 // Opens the side panel and relays messages between the panel and the page.
 
 chrome.runtime.onInstalled.addListener(() => {

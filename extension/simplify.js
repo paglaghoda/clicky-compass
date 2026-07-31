@@ -1,4 +1,4 @@
-/* Guide Me — "Make this page easy to read"
+/* Sherpa — "Make this page easy to read"
    Fully reversible: we only add a class, some inline font sizes we remember,
    and data-guideme-hidden markers. Toggling off removes all of them. */
 

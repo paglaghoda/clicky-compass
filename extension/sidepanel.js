@@ -1,4 +1,4 @@
-/* Guide Me — side panel */
+/* Sherpa — side panel */
 
 const DEFAULT_API_BASE = "https://project--3b888ca9-b53a-4718-9cfe-5bc30531c13a-dev.lovable.app";
 
