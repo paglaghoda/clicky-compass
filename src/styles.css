@@ -106,13 +106,13 @@
   --sidebar-ring: oklch(0.704 0.04 256.788);
 
   /* Sherpa brand palette */
-  --sherpa-cream: #fbfaf7;
-  --sherpa-orange: #ff6a00;
-  --sherpa-navy: #12203a;
-  --sherpa-slate: #4b5a72;
-  --sherpa-soft: #d8e0ec;
-  --font-display-family: "DM Serif Display", Georgia, serif;
-  --font-body-family: "Fira Sans", system-ui, sans-serif;
+  --sherpa-cream: #FBF7EF;
+  --sherpa-orange: #E06B1F;
+  --sherpa-navy: #24291F;
+  --sherpa-slate: #4B5142;
+  --sherpa-soft: #DCD3BE;
+  --font-display-family: "Fraunces", Georgia, serif;
+  --font-body-family: "Source Sans 3", system-ui, sans-serif;
 }
 
 .dark {
