@@ -106,11 +106,11 @@
   --sidebar-ring: oklch(0.704 0.04 256.788);
 
   /* Sherpa brand palette */
-  --sherpa-cream: oklch(0.989 0.037 31.47);
-  --sherpa-orange: oklch(0.636 0.757 7.46);
-  --sherpa-navy: oklch(0.23 0.139 203.63);
-  --sherpa-slate: oklch(0.458 0.09 205.49);
-  --sherpa-soft: oklch(0.905 0.016 200.56);
+  --sherpa-cream: #fbfaf7;
+  --sherpa-orange: #ff6a00;
+  --sherpa-navy: #12203a;
+  --sherpa-slate: #4b5a72;
+  --sherpa-soft: #d8e0ec;
   --font-display-family: "DM Serif Display", Georgia, serif;
   --font-body-family: "Fira Sans", system-ui, sans-serif;
 }
