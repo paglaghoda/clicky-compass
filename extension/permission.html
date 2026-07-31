@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Allow the microphone</title>
+    <style>
+      body {
+        font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+        background: #fbf7ef;
+        color: #24291f;
+        margin: 0;
+        display: grid;
+        place-items: center;
+        min-height: 100vh;
+        padding: 24px;
+      }
+      main {
+        max-width: 620px;
+        text-align: center;
+      }
+      h1 {
+        font-size: 40px;
+        line-height: 1.15;
+        margin: 0 0 16px;
+      }
+      p {
+        font-size: 22px;
+        line-height: 1.5;
+        margin: 0 0 20px;
+      }
+      button {
+        font-size: 24px;
+        padding: 18px 28px;
+        border: none;
+        border-radius: 14px;
+        background: #e06b1f;
+        color: #fff;
+        cursor: pointer;
+      }
+      #done {
+        font-size: 22px;
+        font-weight: 600;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Let me hear you</h1>
+      <p>
+        Press the button below, then choose <strong>Allow</strong> when your browser asks about the
+        microphone. You only need to do this once.
+      </p>
+      <button id="allow">Turn on the microphone</button>
+      <p id="done"></p>
+    </main>
+    <script src="permission.js"></script>
+  </body>
+</html>

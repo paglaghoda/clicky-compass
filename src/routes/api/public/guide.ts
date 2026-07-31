@@ -17,6 +17,8 @@ type GuideRequest = {
   goal?: string;
   history?: { role: "user" | "assistant"; content: string }[];
   page?: { url?: string; title?: string; elements?: GuideElement[] };
+  research?: { feasible?: string; plainAnswer?: string; route?: string[]; sourceUrl?: string | null };
+  noProgress?: number;
 };
 
 const SYSTEM_PROMPT = `You are "Guide Me", a patient assistant that helps elderly people use websites.
@@ -33,8 +35,14 @@ Rules:
 - stepNumber/totalSteps are your best estimate of progress toward the goal.
 - If the goal now looks complete, set done to true and congratulate them.
 
+Being honest beats hunting:
+- If this website does not offer what they asked for, say so plainly and set stuck to true. "This website does not let you do that" is a correct and helpful answer — never invent a menu path or keep opening menus hoping something appears.
+- If you have already looked around and nothing on this site moves the goal forward, set stuck to true and suggest asking a family member or trying somewhere else.
+- If a KNOWN ROUTE is given below, follow it in order instead of guessing.
+
 Respond with ONLY a JSON object:
-{"instruction":string,"spokenText":string,"elementId":string|null,"stepNumber":number,"totalSteps":number,"warning":string|null,"done":boolean}`;
+{"instruction":string,"spokenText":string,"elementId":string|null,"stepNumber":number,"totalSteps":number,"warning":string|null,"done":boolean,"stuck":boolean}`;
+
 
 export const Route = createFileRoute("/api/public/guide")({
   server: {
@@ -77,13 +85,40 @@ export const Route = createFileRoute("/api/public/guide")({
             }))
           : [];
 
+        const research = body.research ?? {};
+        const researchLines: string[] = [];
+        if (research.feasible === "no") {
+          researchLines.push(
+            `CHECKED FIRST: this website does not offer that. ${String(research.plainAnswer ?? "").slice(0, 500)} Tell them plainly and set stuck to true.`,
+          );
+        } else if (research.feasible === "elsewhere") {
+          researchLines.push(
+            `CHECKED FIRST: it cannot be done here, but it can be done elsewhere. ${String(research.plainAnswer ?? "").slice(0, 500)} Tell them where to go and set stuck to true.`,
+          );
+        } else if (Array.isArray(research.route) && research.route.length) {
+          researchLines.push(
+            `KNOWN ROUTE from the site's own help pages (follow it in order):\n${research
+              .route.slice(0, 8)
+              .map((s, i) => `${i + 1}. ${String(s).slice(0, 160)}`)
+              .join("\n")}`,
+          );
+        }
+        const noProgress = Number(body.noProgress) || 0;
+        if (noProgress >= 3) {
+          researchLines.push(
+            `You have given ${noProgress} steps with no progress. Stop hunting: say plainly that you cannot find it here and set stuck to true.`,
+          );
+        }
+
         const pageSummary = [
           `Current page: ${String(body.page?.title ?? "").slice(0, 120)}`,
           `URL: ${String(body.page?.url ?? "").slice(0, 200)}`,
           `Goal: ${goal}`,
+          ...researchLines,
           `Elements on screen (JSON):`,
           JSON.stringify(elements),
         ].join("\n");
+
 
         const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
           method: "POST",
@@ -141,6 +176,8 @@ export const Route = createFileRoute("/api/public/guide")({
             totalSteps: Number(parsed.totalSteps) || 1,
             warning: parsed.warning ? String(parsed.warning) : null,
             done: Boolean(parsed.done),
+            stuck: Boolean(parsed.stuck) || research.feasible === "no" || research.feasible === "elsewhere",
+
           },
           { headers: corsHeaders },
         );

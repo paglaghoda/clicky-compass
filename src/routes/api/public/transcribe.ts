@@ -14,9 +14,7 @@ export const Route = createFileRoute("/api/public/transcribe")({
       OPTIONS: async () => new Response(null, { status: 204, headers: corsHeaders }),
       POST: async ({ request }) => {
         const apiKey = process.env.LOVABLE_API_KEY;
-        if (!apiKey) {
-          return Response.json({ error: "AI is not configured." }, { status: 500, headers: corsHeaders });
-        }
+        const cartesiaKey = process.env.CARTESIA_API_KEY;
 
         let file: File | null = null;
         try {
@@ -38,6 +36,36 @@ export const Route = createFileRoute("/api/public/transcribe")({
             { error: "That recording is too long." },
             { status: 413, headers: corsHeaders },
           );
+        }
+
+        // Preferred: Cartesia Ink-Whisper.
+        if (cartesiaKey) {
+          try {
+            const upstream = new FormData();
+            upstream.append("model", "ink-whisper");
+            upstream.append("language", "en");
+            upstream.append("file", file, "recording.wav");
+
+            const cartesia = await fetch("https://api.cartesia.ai/stt", {
+              method: "POST",
+              headers: { "X-API-Key": cartesiaKey, "Cartesia-Version": "2024-11-13" },
+              body: upstream,
+            });
+            if (cartesia.ok) {
+              const data = (await cartesia.json()) as { text?: string };
+              if (data.text) return Response.json({ text: data.text }, { headers: corsHeaders });
+            } else {
+              console.error(
+                `Cartesia STT error [${cartesia.status}]: ${await cartesia.text().catch(() => "")}`,
+              );
+            }
+          } catch (err) {
+            console.error("Cartesia STT failed", err);
+          }
+        }
+
+        if (!apiKey) {
+          return Response.json({ error: "AI is not configured." }, { status: 500, headers: corsHeaders });
         }
 
         const upstream = new FormData();
