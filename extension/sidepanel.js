@@ -451,17 +451,25 @@ function encodeWav(chunks, sampleRate) {
 function setListening(on) {
   micBtn.classList.toggle("listening", on);
   micSmall.classList.toggle("listening", on);
-  micHint.textContent = on ? "Listening... let go when you're done" : "Hold the button and say it out loud";
+  micHint.textContent = on
+    ? "Listening... let go, or tap again, when you're done"
+    : "Hold the button — or tap it — and say it out loud";
+}
+
+function askForMicPermission() {
+  setStatus("Please tap “Allow” on the page I just opened, then try the microphone again.");
+  micHint.textContent = "I need your permission to use the microphone.";
+  chrome.tabs.create({ url: chrome.runtime.getURL("permission.html") });
 }
 
 async function startRecording() {
-  if (recording) return;
+  if (recording) return false;
   let stream;
   try {
     stream = await navigator.mediaDevices.getUserMedia({ audio: true });
   } catch {
-    setStatus("I need permission to use the microphone.");
-    return;
+    askForMicPermission();
+    return false;
   }
   const ctx = new AudioContext();
   const source = ctx.createMediaStreamSource(stream);
@@ -473,6 +481,7 @@ async function startRecording() {
   recording = { stream, ctx, source, node, chunks };
   setListening(true);
   setStatus("I'm listening.");
+  return true;
 }
 
 async function stopRecording() {
@@ -492,11 +501,13 @@ async function stopRecording() {
   }
 
   setStatus("Understanding what you said...");
+  showThinking();
   try {
     const form = new FormData();
     form.append("audio", blob, "recording.wav");
     const res = await fetch(`${apiBase}/api/public/transcribe`, { method: "POST", body: form });
     const data = await res.json().catch(() => ({}));
+    hideThinking();
     if (!res.ok || !data.text) {
       setStatus(data.error || "I couldn't understand that. Please try again.");
       return;
@@ -509,19 +520,41 @@ async function stopRecording() {
     heardText.textContent = data.text;
     heardEl.hidden = false;
   } catch {
+    hideThinking();
     setStatus("I couldn't hear that. Please try again.");
   }
 }
 
+/* Hold to talk, or simply tap once to start and tap again to stop —
+   whichever a shaky hand manages first. */
 [micBtn, micSmall].forEach((btn) => {
-  btn.addEventListener("pointerdown", (e) => {
+  let pressedAt = 0;
+  let startedByThisPress = false;
+
+  btn.addEventListener("pointerdown", async (e) => {
     e.preventDefault();
-    startRecording();
+    if (recording) {
+      // tap-to-stop
+      await stopRecording();
+      startedByThisPress = false;
+      pressedAt = 0;
+      return;
+    }
+    pressedAt = Date.now();
+    startedByThisPress = await startRecording();
   });
-  ["pointerup", "pointerleave", "pointercancel"].forEach((evt) =>
-    btn.addEventListener(evt, () => stopRecording()),
-  );
+
+  const release = () => {
+    if (!recording || !startedByThisPress) return;
+    // A quick tap leaves it listening; a real hold stops on release.
+    if (Date.now() - pressedAt < 500) return;
+    stopRecording();
+    startedByThisPress = false;
+  };
+
+  ["pointerup", "pointercancel"].forEach((evt) => btn.addEventListener(evt, release));
 });
+
 
 /* ---------- sheets: menu, settings, history, family ---------- */
 
