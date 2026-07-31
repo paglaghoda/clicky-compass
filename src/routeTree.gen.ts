@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiPublicGuideRouteImport } from './routes/api/public/guide'
+import { Route as ApiPublicHandoffRouteImport } from './routes/api/public/handoff'
 import { Route as ApiPublicInspectRouteImport } from './routes/api/public/inspect'
 import { Route as ApiPublicSpeakRouteImport } from './routes/api/public/speak'
 import { Route as ApiPublicTranscribeRouteImport } from './routes/api/public/transcribe'
@@ -23,6 +24,11 @@ const IndexRoute = IndexRouteImport.update({
 const ApiPublicGuideRoute = ApiPublicGuideRouteImport.update({
   id: '/api/public/guide',
   path: '/api/public/guide',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicHandoffRoute = ApiPublicHandoffRouteImport.update({
+  id: '/api/public/handoff',
+  path: '/api/public/handoff',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicInspectRoute = ApiPublicInspectRouteImport.update({
@@ -44,6 +50,7 @@ const ApiPublicTranscribeRoute = ApiPublicTranscribeRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/api/public/guide': typeof ApiPublicGuideRoute
+  '/api/public/handoff': typeof ApiPublicHandoffRoute
   '/api/public/inspect': typeof ApiPublicInspectRoute
   '/api/public/speak': typeof ApiPublicSpeakRoute
   '/api/public/transcribe': typeof ApiPublicTranscribeRoute
@@ -51,6 +58,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/api/public/guide': typeof ApiPublicGuideRoute
+  '/api/public/handoff': typeof ApiPublicHandoffRoute
   '/api/public/inspect': typeof ApiPublicInspectRoute
   '/api/public/speak': typeof ApiPublicSpeakRoute
   '/api/public/transcribe': typeof ApiPublicTranscribeRoute
@@ -59,6 +67,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/api/public/guide': typeof ApiPublicGuideRoute
+  '/api/public/handoff': typeof ApiPublicHandoffRoute
   '/api/public/inspect': typeof ApiPublicInspectRoute
   '/api/public/speak': typeof ApiPublicSpeakRoute
   '/api/public/transcribe': typeof ApiPublicTranscribeRoute
@@ -68,6 +77,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/api/public/guide'
+    | '/api/public/handoff'
     | '/api/public/inspect'
     | '/api/public/speak'
     | '/api/public/transcribe'
@@ -75,6 +85,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/api/public/guide'
+    | '/api/public/handoff'
     | '/api/public/inspect'
     | '/api/public/speak'
     | '/api/public/transcribe'
@@ -82,6 +93,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/api/public/guide'
+    | '/api/public/handoff'
     | '/api/public/inspect'
     | '/api/public/speak'
     | '/api/public/transcribe'
@@ -90,6 +102,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ApiPublicGuideRoute: typeof ApiPublicGuideRoute
+  ApiPublicHandoffRoute: typeof ApiPublicHandoffRoute
   ApiPublicInspectRoute: typeof ApiPublicInspectRoute
   ApiPublicSpeakRoute: typeof ApiPublicSpeakRoute
   ApiPublicTranscribeRoute: typeof ApiPublicTranscribeRoute
@@ -109,6 +122,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/guide'
       fullPath: '/api/public/guide'
       preLoaderRoute: typeof ApiPublicGuideRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/handoff': {
+      id: '/api/public/handoff'
+      path: '/api/public/handoff'
+      fullPath: '/api/public/handoff'
+      preLoaderRoute: typeof ApiPublicHandoffRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/inspect': {
@@ -138,6 +158,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ApiPublicGuideRoute: ApiPublicGuideRoute,
+  ApiPublicHandoffRoute: ApiPublicHandoffRoute,
   ApiPublicInspectRoute: ApiPublicInspectRoute,
   ApiPublicSpeakRoute: ApiPublicSpeakRoute,
   ApiPublicTranscribeRoute: ApiPublicTranscribeRoute,
@@ -145,13 +166,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

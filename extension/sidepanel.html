@@ -6,31 +6,16 @@
     <title>Guide Me</title>
     <link rel="stylesheet" href="sidepanel.css" />
   </head>
-  <body>
+  <body data-view="ask">
     <header class="header">
       <div class="brand">
-        <img src="icon.png" alt="" width="36" height="36" />
-        <div>
-          <h1>Guide Me</h1>
-          <p>I'll show you what to click.</p>
-        </div>
+        <img src="icon.png" alt="" width="30" height="30" />
+        <h1>Guide Me</h1>
       </div>
-      <button id="settings-btn" class="icon-btn" title="Settings" aria-label="Settings">&#9881;</button>
+      <button id="menu-btn" class="icon-btn" title="More" aria-label="More">&#9776;</button>
     </header>
 
-    <section id="settings" class="settings" hidden>
-      <label for="api-base">Helper address</label>
-      <input id="api-base" type="url" spellcheck="false" />
-      <button id="save-settings" class="secondary-btn">Save</button>
-    </section>
-
-    <div class="tools">
-      <button id="simplify-btn" class="simplify-btn" aria-pressed="false">
-        <span class="simplify-icon" aria-hidden="true">&#128083;</span>
-        <span id="simplify-text">Make this page easy to read</span>
-      </button>
-    </div>
-
+    <!-- ===== warnings (can appear on any view) ===== -->
     <section id="guard" class="guard" hidden>
       <h2 id="guard-headline"></h2>
       <p id="guard-explanation"></p>
@@ -41,45 +26,83 @@
       </div>
     </section>
 
-    <section id="progress" class="progress" hidden>
-      <div class="progress-text"><span id="step-label">Step 1 of 1</span></div>
-      <div class="progress-bar"><div id="progress-fill"></div></div>
-    </section>
+    <!-- ===== view 1: ask ===== -->
+    <main id="ask" class="view ask">
+      <h2 class="ask-title">What would you like to do?</h2>
 
+      <button id="mic-btn" class="mic" aria-label="Hold to talk">
+        <span class="mic-ring" aria-hidden="true"></span>
+        <span class="mic-icon" aria-hidden="true">&#127908;</span>
+      </button>
+      <p id="mic-hint" class="mic-hint">Hold the button and say it out loud</p>
 
-    <main id="chat" class="chat" aria-live="polite">
-      <div class="bubble assistant welcome">
-        <p>Hello! Tell me what you would like to do on this website.</p>
-        <p class="examples">For example:</p>
+      <div id="heard" class="heard" hidden>
+        <p class="heard-label">I heard:</p>
+        <p id="heard-text" class="heard-text"></p>
+        <div class="heard-actions">
+          <button id="heard-go" class="primary-btn">Yes, help me</button>
+          <button id="heard-redo" class="quiet-btn">Try again</button>
+        </div>
+      </div>
+
+      <details class="typing">
+        <summary>Or type it instead</summary>
+        <textarea id="input" rows="2" placeholder="Cancel my Amazon Prime subscription"></textarea>
+        <button id="send-btn" class="primary-btn wide">Help me with this</button>
+      </details>
+
+      <div class="examples">
         <button class="example">Cancel my Amazon Prime subscription</button>
         <button class="example">Change my password</button>
         <button class="example">Book a doctor's appointment</button>
       </div>
-      <div id="thinking" class="bubble thinking" hidden>
+    </main>
+
+    <!-- ===== view 2: guiding ===== -->
+    <main id="guiding" class="view guiding">
+      <div class="progress">
+        <span id="step-label">Step 1 of 1</span>
+        <div class="progress-bar"><div id="progress-fill"></div></div>
+      </div>
+
+      <div id="step-card" class="step-card">
+        <p id="step-text">Let's begin.</p>
+        <div id="step-warning" class="warning" hidden></div>
+      </div>
+
+      <div id="thinking" class="thinking" hidden>
         <span class="thinking-dots" aria-hidden="true"><span></span><span></span><span></span></span>
-        <span class="thinking-text">Thinking</span>
+        <span>Thinking</span>
+      </div>
+
+      <div class="step-actions">
+        <button id="repeat-btn" class="quiet-btn">&#128266; Say it again</button>
+        <button id="find-btn" class="quiet-btn">&#128269; I can't find it</button>
+        <button id="mic-small" class="quiet-btn">&#127908; Hold to talk</button>
+        <button id="family-btn" class="quiet-btn">&#128100; Ask my family</button>
+        <button id="stop-btn" class="quiet-btn danger">&#10006; Stop</button>
       </div>
     </main>
 
-    <div id="controls" class="controls" hidden>
-      <button id="repeat-btn" class="secondary-btn">&#128266; Say it again</button>
-      <button id="find-btn" class="secondary-btn">&#128269; I can't find it</button>
-      <button id="stop-btn" class="secondary-btn danger">&#10006; Stop</button>
-    </div>
-
-    <footer class="composer">
-      <textarea
-        id="input"
-        rows="2"
-        placeholder="Type what you want to do..."
-        autocomplete="off"
-      ></textarea>
-      <div class="composer-row">
-        <button id="mic-btn" class="mic-btn">&#127908; Hold to talk</button>
-        <button id="send-btn" class="send-btn">Send</button>
-      </div>
+    <!-- ===== always-available bottom row ===== -->
+    <footer class="bottom">
+      <button id="simplify-btn" class="simplify-btn" aria-pressed="false">
+        <span aria-hidden="true">&#128083;</span>
+        <span id="simplify-text">Make this page easy to read</span>
+      </button>
       <p id="status" class="status"></p>
     </footer>
+
+    <!-- ===== sheets ===== -->
+    <div id="sheet" class="sheet" hidden>
+      <div class="sheet-card">
+        <div class="sheet-head">
+          <h2 id="sheet-title">Menu</h2>
+          <button id="sheet-close" class="icon-btn" aria-label="Close">&#10006;</button>
+        </div>
+        <div id="sheet-body" class="sheet-body"></div>
+      </div>
+    </div>
 
     <script src="sidepanel.js"></script>
   </body>
