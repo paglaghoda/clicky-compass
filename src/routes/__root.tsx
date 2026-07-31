@@ -77,7 +77,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Guide Me — Website Helper" },
+      { title: "Sherpa — Guide Me" },
       {
         name: "description",
         content: "A Chrome helper that points at what to click on any website.",

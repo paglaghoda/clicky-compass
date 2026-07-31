@@ -1,12 +1,12 @@
 {
   "manifest_version": 3,
-  "name": "Guide Me — Website Helper",
+  "name": "Sherpa — Guide Me",
   "version": "1.0.0",
   "description": "A friendly helper that points at exactly what to click, on any website, and reads each step out loud.",
   "permissions": ["activeTab", "scripting", "storage", "tabs", "sidePanel", "clipboardWrite", "audioCapture"],
   "host_permissions": ["<all_urls>"],
   "action": {
-    "default_title": "Open Guide Me",
+    "default_title": "Open Sherpa",
     "default_icon": {
       "48": "icon.png",
       "128": "icon.png"

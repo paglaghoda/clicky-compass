@@ -1,4 +1,4 @@
-/* Guide Me — content script
+/* Sherpa — content script
    Builds a map of what is visible on the page and draws the big arrow + highlight. */
 
 (() => {
