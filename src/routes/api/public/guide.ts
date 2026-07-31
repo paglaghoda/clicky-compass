@@ -85,13 +85,40 @@ export const Route = createFileRoute("/api/public/guide")({
             }))
           : [];
 
+        const research = body.research ?? {};
+        const researchLines: string[] = [];
+        if (research.feasible === "no") {
+          researchLines.push(
+            `CHECKED FIRST: this website does not offer that. ${String(research.plainAnswer ?? "").slice(0, 500)} Tell them plainly and set stuck to true.`,
+          );
+        } else if (research.feasible === "elsewhere") {
+          researchLines.push(
+            `CHECKED FIRST: it cannot be done here, but it can be done elsewhere. ${String(research.plainAnswer ?? "").slice(0, 500)} Tell them where to go and set stuck to true.`,
+          );
+        } else if (Array.isArray(research.route) && research.route.length) {
+          researchLines.push(
+            `KNOWN ROUTE from the site's own help pages (follow it in order):\n${research
+              .route.slice(0, 8)
+              .map((s, i) => `${i + 1}. ${String(s).slice(0, 160)}`)
+              .join("\n")}`,
+          );
+        }
+        const noProgress = Number(body.noProgress) || 0;
+        if (noProgress >= 3) {
+          researchLines.push(
+            `You have given ${noProgress} steps with no progress. Stop hunting: say plainly that you cannot find it here and set stuck to true.`,
+          );
+        }
+
         const pageSummary = [
           `Current page: ${String(body.page?.title ?? "").slice(0, 120)}`,
           `URL: ${String(body.page?.url ?? "").slice(0, 200)}`,
           `Goal: ${goal}`,
+          ...researchLines,
           `Elements on screen (JSON):`,
           JSON.stringify(elements),
         ].join("\n");
+
 
         const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
           method: "POST",
